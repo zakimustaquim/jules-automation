@@ -15,7 +15,8 @@
 # Optional env vars:
 #   TARGET_BRANCH          - Branch to target (default: main)
 #   PROMPT                 - Session prompt (default: "Do something interesting in this codebase")
-#   PROMPTS                - JSON array of prompts to cycle through (overrides PROMPT if set)
+#   PROMPTS                - JSON array of prompt objects with "text" and "probability" (overrides PROMPT if set)
+#                            Example: '[{"text":"Add feature","probability":0.5},{"text":"Fix bug","probability":0.3},{"text":"Docs","probability":0.2}]'
 #   EXECUTION_TIMEOUT_SECS - Max time per session (default: 1800)
 #   RETRY_MAX              - Max retries for transient errors (default: 3)
 #   RETRY_BASE_SECS        - Base retry delay (default: 5)
@@ -393,16 +394,14 @@ increment_quota() {
 }
 
 # =============================================================================
-# Prompt Cycling
+# Prompt Selection (Probability-based)
 # =============================================================================
 
-PROMPT_COUNT=0
 CURRENT_PROMPT=""
 
 init_prompts() {
     if [[ -z "$PROMPTS" ]]; then
         # No PROMPTS array, use single PROMPT
-        PROMPT_COUNT=1
         log_event "info" "Using single prompt: $PROMPT"
         return 0
     fi
@@ -413,14 +412,34 @@ init_prompts() {
         return 1
     fi
 
-    PROMPT_COUNT=$(echo "$PROMPTS" | jq 'length')
+    local prompt_count
+    prompt_count=$(echo "$PROMPTS" | jq 'length')
 
-    if (( PROMPT_COUNT == 0 )); then
+    if (( prompt_count == 0 )); then
         log_event "error" "PROMPTS array is empty"
         return 1
     fi
 
-    log_event "info" "Using $PROMPT_COUNT prompts in rotation"
+    # Validate each prompt has text and probability
+    local validation
+    validation=$(echo "$PROMPTS" | jq -e 'all(has("text") and has("probability"))' 2>/dev/null)
+    if [[ "$validation" != "true" ]]; then
+        log_event "error" "Each prompt must have 'text' and 'probability' fields"
+        return 1
+    fi
+
+    # Validate probabilities sum to ~1.0 (allow small floating point error)
+    local prob_sum
+    prob_sum=$(echo "$PROMPTS" | jq '[.[].probability] | add')
+    local prob_check
+    prob_check=$(echo "$prob_sum" | awk '{if ($1 >= 0.99 && $1 <= 1.01) print "valid"; else print "invalid"}')
+
+    if [[ "$prob_check" != "valid" ]]; then
+        log_event "error" "Probabilities must sum to 1.0 (current sum: $prob_sum)"
+        return 1
+    fi
+
+    log_event "info" "Using $prompt_count prompts with probability-based selection"
 }
 
 get_next_prompt() {
@@ -430,21 +449,31 @@ get_next_prompt() {
         return 0
     fi
 
-    # Get current index from state (defaults to 0)
-    local index
-    index=$(read_state "prompt_index")
-    index="${index:-0}"
+    # Generate random number between 0 and 1
+    local random_value
+    random_value=$(awk -v seed="$RANDOM" 'BEGIN {srand(seed); printf "%.6f", rand()}')
 
-    # Get the prompt at current index
-    CURRENT_PROMPT=$(echo "$PROMPTS" | jq -r ".[$index]")
+    # Select prompt based on cumulative probability
+    CURRENT_PROMPT=$(echo "$PROMPTS" | jq -r --arg rand "$random_value" '
+        . as $prompts |
+        0 as $cumulative |
+        foreach $prompts[] as $p (
+            {cumulative: 0, selected: null};
+            {
+                cumulative: (.cumulative + $p.probability),
+                selected: (if (.cumulative + $p.probability) >= ($rand | tonumber) and .selected == null then $p.text else .selected end)
+            };
+            .selected
+        ) | select(. != null)
+    ' | head -1)
 
-    # Calculate next index (wrap around)
-    local next_index=$(( (index + 1) % PROMPT_COUNT ))
+    # Fallback to first prompt if selection fails
+    if [[ -z "$CURRENT_PROMPT" ]]; then
+        CURRENT_PROMPT=$(echo "$PROMPTS" | jq -r '.[0].text')
+        log_event "warning" "Prompt selection failed, using first prompt as fallback"
+    fi
 
-    # Save next index to state
-    write_state "prompt_index" "$next_index"
-
-    log_event "info" "Using prompt $((index + 1))/$PROMPT_COUNT: ${CURRENT_PROMPT:0:50}..."
+    log_event "info" "Selected prompt (p=$random_value): ${CURRENT_PROMPT:0:50}..."
 }
 
 # =============================================================================
