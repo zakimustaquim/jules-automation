@@ -187,7 +187,7 @@ jules_api() {
         -s
         -w "\n%{http_code}"
         -X "$method"
-        -H "Authorization: Bearer $JULES_API_KEY"
+        -H "X-Goog-Api-Key: $JULES_API_KEY"
         -H "Content-Type: application/json"
     )
 
