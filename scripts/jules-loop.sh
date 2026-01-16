@@ -177,6 +177,15 @@ retry_with_backoff() {
 # =============================================================================
 
 LAST_HTTP_CODE=""
+HTTP_CODE_FILE=""
+
+init_http_helpers() {
+    HTTP_CODE_FILE=$(mktemp)
+}
+
+cleanup_http_helpers() {
+    [[ -n "$HTTP_CODE_FILE" && -f "$HTTP_CODE_FILE" ]] && rm -f "$HTTP_CODE_FILE"
+}
 
 jules_api() {
     local method="$1"
@@ -187,7 +196,7 @@ jules_api() {
         -s
         -w "\n%{http_code}"
         -X "$method"
-        -H "X-Goog-Api-Key: $JULES_API_KEY"
+        -H "x-goog-api-key: $JULES_API_KEY"
         -H "Content-Type: application/json"
     )
 
@@ -198,8 +207,12 @@ jules_api() {
     local response
     response=$(curl "${args[@]}" "${JULES_API_BASE}${endpoint}")
 
-    LAST_HTTP_CODE=$(echo "$response" | tail -1)
+    echo "$response" | tail -1 > "$HTTP_CODE_FILE"
     echo "$response" | sed '$d'
+}
+
+read_http_code() {
+    LAST_HTTP_CODE=$(cat "$HTTP_CODE_FILE" 2>/dev/null || echo "")
 }
 
 github_api() {
@@ -223,7 +236,7 @@ github_api() {
     local response
     response=$(curl "${args[@]}" "https://api.github.com${endpoint}")
 
-    LAST_HTTP_CODE=$(echo "$response" | tail -1)
+    echo "$response" | tail -1 > "$HTTP_CODE_FILE"
     echo "$response" | sed '$d'
 }
 
@@ -285,7 +298,8 @@ validate_credentials() {
     # Validate Jules API key
     log_event "info" "Validating Jules API credentials..."
     local jules_response
-    jules_response=$(jules_api GET "/v1alpha/sources")
+    jules_response=$(jules_api GET "/v1alpha/sessions")
+    read_http_code
 
     if is_auth_error "$LAST_HTTP_CODE"; then
         log_event "error" "Jules API authentication failed (HTTP $LAST_HTTP_CODE)"
@@ -303,6 +317,7 @@ validate_credentials() {
     log_event "info" "Validating GitHub credentials..."
     local gh_response
     gh_response=$(github_api GET "/repos/$GITHUB_OWNER/$GITHUB_REPO_NAME")
+    read_http_code
 
     if is_auth_error "$LAST_HTTP_CODE"; then
         log_event "error" "GitHub authentication failed (HTTP $LAST_HTTP_CODE)"
@@ -557,6 +572,7 @@ merge_pr() {
 
     local response
     response=$(github_api PUT "/repos/$GITHUB_OWNER/$GITHUB_REPO_NAME/pulls/$CURRENT_PR_NUMBER/merge" "$payload")
+    read_http_code
 
     local merged
     merged=$(echo "$response" | jq -r '.merged // false')
@@ -681,6 +697,8 @@ run_loop() {
 main() {
     load_config
     init_state
+    init_http_helpers
+    trap cleanup_http_helpers EXIT
 
     log_event "info" "jules-loop.sh starting"
     log_event "info" "Repository: $GITHUB_REPO, Branch: $TARGET_BRANCH"
