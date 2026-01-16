@@ -1,50 +1,102 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- 
+SYNC IMPACT REPORT
+
+Version: 1.0.0 (NEW - initial constitution created)
+Modified Principles: N/A (new)
+Added Sections: Core Principles (5 principles), Anti-Patterns section, Governance
+Removed Sections: None
+Templates Updated:
+  - plan-template.md: ✅ Reviewed - no changes needed (no overengineering gates present)
+  - spec-template.md: ✅ Reviewed - principles align with flexibility
+  - tasks-template.md: ✅ Reviewed - no mandatory testing gates that conflict
+  
+Rationale: Initial constitution emphasizing personal/for-fun project nature with pragmatism, fun-first values, and explicit anti-overengineering guidance.
+
+-->
+
+# Jules' Interesting App Automation Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. For-Fun & Personal
+This is a personal, hobby project created for learning and enjoyment. There is NO production deadline, NO paying customers, and NO operational obligations. The goal is to explore ideas, experiment with technology, and have fun—not to build production-grade infrastructure.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+**Non-negotiable**:
+- Do not justify complexity with "production readiness" or "scalability"
+- Do not implement features "just in case" we might need them later
+- Abandon features mid-project if they stop being fun
+- Prioritize personal satisfaction over best practices
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### II. Pragmatism Over Perfectionism
+Start simple and add complexity only when it creates immediate, tangible value. Incomplete or rough solutions are acceptable if they work well enough for a personal project.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+**Non-negotiable**:
+- YAGNI principle enforced: "You Aren't Gonna Need It"—don't build for hypothetical requirements
+- Single-file scripts are acceptable; you don't need monorepos
+- Hardcoded values are fine if they work; avoid premature abstraction
+- Tech debt is acceptable if it unblocks momentum
+- Skipping tests is acceptable if you're learning or prototyping
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### III. Velocity Over Ceremony
+Minimize process overhead. No mandatory code reviews, formal design documents, or lengthy meetings. Use the least friction path to getting working code.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+**Non-negotiable**:
+- No bureaucratic gates or approval workflows
+- Commit messages can be casual; "fix stuff" is fine
+- Refactoring can happen ad-hoc without formal sprints
+- Documentation is optional unless you genuinely need it later
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### IV. Learning-Driven
+The primary metric of success is "Did I learn something interesting?" Pursuing technologies, patterns, or approaches that are educationally valuable is encouraged, even if they're not "the best" for the job.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+**Non-negotiable**:
+- Experimentation is always encouraged
+- Dead ends and failed experiments are learning opportunities, not failures
+- Adopt new tools or languages whenever curious—this is the whole point
+- Document learnings, not requirements
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### V. Maintainability Without Dogma
+Write code that future-you (6 months from now) can understand and modify without excessive study. But don't obsess over extensibility or clean architecture—clarity matters more than cleverness.
+
+**Non-negotiable**:
+- Comments explaining *why*, not *what*—if code is confusing, clarify it
+- Function names should be self-documenting
+- Avoid clever one-liners that sacrifice readability
+- Refactor ruthlessly when code feels confusing; procrastinating makes it worse
+
+## Anti-Patterns (What NOT to Do)
+
+These practices are actively discouraged:
+
+- **"Enterprise Grade" Everything**: Do not implement microservices, message queues, databases, Docker orchestration, or CI/CD pipelines unless the project genuinely needs them
+- **Premature Optimization**: Do not optimize performance, memory, or resource usage until something is actually slow
+- **Over-Testing**: Do not write 100% test coverage or extensive mocking; integration tests only if you're debugging real bugs
+- **Abstraction Creep**: Do not create base classes, interfaces, or factories for code that appears in only one place
+- **Deferred Decisions**: Do not postpone technical choices waiting for "the right architecture"—pick something and move on
+
+## Development Guidelines
+
+- **Tech Decisions**: Choose tools based on curiosity, not industry trends
+- **Documentation**: Write it only when you'd benefit from reading it later
+- **Refactoring**: Improve code as you go if it bothers you; don't defer it indefinitely
+- **Debugging**: Use `print()` / `console.log()` fearlessly; debuggers optional
+- **Shipping**: "Done and shipped" beats "perfect but unfinished"
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+**Constitution Primacy**: This constitution overrides all other project templates, guides, or conventions. When in doubt, ask: "Does this add fun or learning?" If no, don't do it.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Amendment Process**: Amendments require only a brief note explaining the change (no formal approval needed). Update this file and move forward.
+
+**Compliance Review**: No automated gates. If you feel the project is over-engineered, update the constitution to reduce constraints.
+
+**Version Policy**: Use semantic versioning (MAJOR.MINOR.PATCH):
+- **MAJOR**: Removed a principle or fundamentally changed project goals
+- **MINOR**: Added a new principle or materially expanded guidance
+- **PATCH**: Clarifications, rewording, or non-semantic changes
+
+**Runtime Guidance**: Refer to project-specific documentation (e.g., `.claude/commands/`) for execution workflows. This constitution sets values; those files operationalize them.
+
+---
+
+**Version**: 1.0.0 | **Created**: 2025-06-13 | **Last Amended**: 2026-01-16
