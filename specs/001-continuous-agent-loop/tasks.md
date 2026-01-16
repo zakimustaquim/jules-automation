@@ -16,8 +16,8 @@ description: "Task list for Continuous Agent Loop"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create scripts/jules-loop.sh with a minimal bash skeleton and executable bit
-- [ ] T002 Add .jules/ to .gitignore (create .gitignore if missing)
+- [x] T001 Create scripts/jules-loop.sh with a minimal bash skeleton and executable bit
+- [x] T002 Add .jules/ to .gitignore (create .gitignore if missing)
 
 ---
 
@@ -25,12 +25,12 @@ description: "Task list for Continuous Agent Loop"
 
 **Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented
 
-- [ ] T003 Implement config loading (.env + env vars) with defaults in scripts/jules-loop.sh
-- [ ] T004 Implement JSON log writer to .jules/log.jsonl in scripts/jules-loop.sh
-- [ ] T005 Implement state read/write helpers for .jules/state.json in scripts/jules-loop.sh
-- [ ] T006 Implement HTTP helper (curl + jq) with Jules/GitHub headers in scripts/jules-loop.sh
-- [ ] T007 Implement graceful shutdown trap and state flush in scripts/jules-loop.sh
-- [ ] T008 Implement Jules source discovery (GET /v1alpha/sources) in scripts/jules-loop.sh
+- [x] T003 Implement config loading (.env + env vars) with defaults in scripts/jules-loop.sh
+- [x] T004 Implement JSON log writer to .jules/log.jsonl in scripts/jules-loop.sh
+- [x] T005 Implement state read/write helpers for .jules/state.json in scripts/jules-loop.sh
+- [x] T006 Implement HTTP helper (curl + jq) with Jules/GitHub headers in scripts/jules-loop.sh
+- [x] T007 Implement graceful shutdown trap and state flush in scripts/jules-loop.sh
+- [x] T008 Implement Jules source discovery (GET /v1alpha/sources) in scripts/jules-loop.sh
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 
@@ -44,10 +44,10 @@ description: "Task list for Continuous Agent Loop"
 
 ### Implementation for User Story 1
 
-- [ ] T009 [US1] Create session (POST /v1alpha/sessions) with prompt in scripts/jules-loop.sh
-- [ ] T010 [US1] Poll session (GET /v1alpha/sessions/{id}) and extract PR URL/number in scripts/jules-loop.sh
-- [ ] T011 [US1] Merge PR via GitHub API (PUT /repos/{owner}/{repo}/pulls/{number}/merge) in scripts/jules-loop.sh
-- [ ] T012 [US1] Implement main loop sequence create → poll → merge → repeat in scripts/jules-loop.sh
+- [x] T009 [US1] Create session (POST /v1alpha/sessions) with prompt in scripts/jules-loop.sh
+- [x] T010 [US1] Poll session (GET /v1alpha/sessions/{id}) and extract PR URL/number in scripts/jules-loop.sh
+- [x] T011 [US1] Merge PR via GitHub API (PUT /repos/{owner}/{repo}/pulls/{number}/merge) in scripts/jules-loop.sh
+- [x] T012 [US1] Implement main loop sequence create → poll → merge → repeat in scripts/jules-loop.sh
 
 **Checkpoint**: User Story 1 is functional and can run the basic loop end-to-end
 
@@ -61,12 +61,12 @@ description: "Task list for Continuous Agent Loop"
 
 ### Implementation for User Story 2
 
-- [ ] T013 [US2] Add retry with exponential backoff for transient API errors in scripts/jules-loop.sh
-- [ ] T014 [US2] Validate Jules + GitHub credentials on startup in scripts/jules-loop.sh
-- [ ] T015 [US2] Detect merge conflicts and pause loop with PR ID logged in scripts/jules-loop.sh
-- [ ] T016 [US2] Implement execution timeout handling and skip to next session in scripts/jules-loop.sh
-- [ ] T017 [US2] Implement optional quota tracking/pause when QUOTA_DAILY_LIMIT is exceeded in scripts/jules-loop.sh
-- [ ] T018 [US2] Add fatal-error pause/alert behavior with clear logging in scripts/jules-loop.sh
+- [x] T013 [US2] Add retry with exponential backoff for transient API errors in scripts/jules-loop.sh
+- [x] T014 [US2] Validate Jules + GitHub credentials on startup in scripts/jules-loop.sh
+- [x] T015 [US2] Detect merge conflicts and pause loop with PR ID logged in scripts/jules-loop.sh
+- [x] T016 [US2] Implement execution timeout handling and skip to next session in scripts/jules-loop.sh
+- [x] T017 [US2] Implement optional quota tracking/pause when QUOTA_DAILY_LIMIT is exceeded in scripts/jules-loop.sh
+- [x] T018 [US2] Add fatal-error pause/alert behavior with clear logging in scripts/jules-loop.sh
 
 **Checkpoint**: User Story 2 error handling behaviors operate without breaking the US1 loop
 
@@ -76,8 +76,8 @@ description: "Task list for Continuous Agent Loop"
 
 **Purpose**: Light documentation and alignment
 
-- [ ] T019 Update README.md with usage, env vars, and expected outputs
-- [ ] T020 Validate and align specs/001-continuous-agent-loop/quickstart.md with script behavior
+- [x] T019 Update README.md with usage, env vars, and expected outputs
+- [x] T020 Validate and align specs/001-continuous-agent-loop/quickstart.md with script behavior
 
 ---
 

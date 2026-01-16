@@ -1,0 +1,14 @@
+# Jules agent loop state and logs
+.jules/
+
+# Environment files
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.tmp
