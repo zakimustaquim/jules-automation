@@ -1,0 +1,110 @@
+openapi: 3.0.3
+info:
+  title: Jules API (subset for continuous loop)
+  version: v1alpha
+servers:
+  - url: https://jules.googleapis.com
+paths:
+  /v1alpha/sources:
+    get:
+      summary: List sources
+      responses:
+        "200":
+          description: List of sources
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sources:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        id:
+                          type: string
+                        githubRepo:
+                          type: object
+                          properties:
+                            owner:
+                              type: string
+                            repo:
+                              type: string
+  /v1alpha/sessions:
+    post:
+      summary: Create session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prompt:
+                  type: string
+                title:
+                  type: string
+                automationMode:
+                  type: string
+                  enum: [AUTO_CREATE_PR]
+                sourceContext:
+                  type: object
+                  properties:
+                    source:
+                      type: string
+                    githubRepoContext:
+                      type: object
+                      properties:
+                        startingBranch:
+                          type: string
+              required: [prompt, sourceContext]
+      responses:
+        "200":
+          description: Session created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  id:
+                    type: string
+  /v1alpha/{name}:
+    get:
+      summary: Get session
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+          description: Session name, e.g. sessions/{id}
+      responses:
+        "200":
+          description: Session
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  id:
+                    type: string
+                  outputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        pullRequest:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                            title:
+                              type: string
+                            description:
+                              type: string
