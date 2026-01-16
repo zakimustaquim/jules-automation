@@ -15,6 +15,7 @@
 # Optional env vars:
 #   TARGET_BRANCH          - Branch to target (default: main)
 #   PROMPT                 - Session prompt (default: "Do something interesting in this codebase")
+#   PROMPTS                - JSON array of prompts to cycle through (overrides PROMPT if set)
 #   EXECUTION_TIMEOUT_SECS - Max time per session (default: 1800)
 #   RETRY_MAX              - Max retries for transient errors (default: 3)
 #   RETRY_BASE_SECS        - Base retry delay (default: 5)
@@ -53,6 +54,7 @@ load_config() {
     # Optional env vars with defaults
     TARGET_BRANCH="${TARGET_BRANCH:-main}"
     PROMPT="${PROMPT:-Do something interesting in this codebase}"
+    PROMPTS="${PROMPTS:-}"
     EXECUTION_TIMEOUT_SECS="${EXECUTION_TIMEOUT_SECS:-1800}"
     RETRY_MAX="${RETRY_MAX:-3}"
     RETRY_BASE_SECS="${RETRY_BASE_SECS:-5}"
@@ -391,6 +393,61 @@ increment_quota() {
 }
 
 # =============================================================================
+# Prompt Cycling
+# =============================================================================
+
+PROMPT_COUNT=0
+CURRENT_PROMPT=""
+
+init_prompts() {
+    if [[ -z "$PROMPTS" ]]; then
+        # No PROMPTS array, use single PROMPT
+        PROMPT_COUNT=1
+        log_event "info" "Using single prompt: $PROMPT"
+        return 0
+    fi
+
+    # Validate PROMPTS is valid JSON array
+    if ! echo "$PROMPTS" | jq -e 'type == "array"' > /dev/null 2>&1; then
+        log_event "error" "PROMPTS must be a valid JSON array"
+        return 1
+    fi
+
+    PROMPT_COUNT=$(echo "$PROMPTS" | jq 'length')
+
+    if (( PROMPT_COUNT == 0 )); then
+        log_event "error" "PROMPTS array is empty"
+        return 1
+    fi
+
+    log_event "info" "Using $PROMPT_COUNT prompts in rotation"
+}
+
+get_next_prompt() {
+    if [[ -z "$PROMPTS" ]]; then
+        # No PROMPTS array, use single PROMPT
+        CURRENT_PROMPT="$PROMPT"
+        return 0
+    fi
+
+    # Get current index from state (defaults to 0)
+    local index
+    index=$(read_state "prompt_index")
+    index="${index:-0}"
+
+    # Get the prompt at current index
+    CURRENT_PROMPT=$(echo "$PROMPTS" | jq -r ".[$index]")
+
+    # Calculate next index (wrap around)
+    local next_index=$(( (index + 1) % PROMPT_COUNT ))
+
+    # Save next index to state
+    write_state "prompt_index" "$next_index"
+
+    log_event "info" "Using prompt $((index + 1))/$PROMPT_COUNT: ${CURRENT_PROMPT:0:50}..."
+}
+
+# =============================================================================
 # Fatal Error Handling
 # =============================================================================
 
@@ -440,6 +497,9 @@ CURRENT_PR_URL=""
 CURRENT_PR_NUMBER=""
 
 create_session() {
+    # Get the next prompt in the rotation
+    get_next_prompt
+
     log_event "agent_created" "Creating new Jules session..."
 
     if [[ "$DRY_RUN" == "true" ]]; then
@@ -451,7 +511,7 @@ create_session() {
 
     local payload
     payload=$(jq -n \
-        --arg prompt "$PROMPT" \
+        --arg prompt "$CURRENT_PROMPT" \
         --arg title "Jules auto-session $(date -u +%Y-%m-%dT%H:%M:%SZ)" \
         --arg source "$JULES_SOURCE" \
         --arg branch "$TARGET_BRANCH" \
@@ -485,7 +545,7 @@ create_session() {
     agent_state=$(jq -n \
         --arg id "$CURRENT_SESSION_ID" \
         --arg name "$CURRENT_SESSION_NAME" \
-        --arg prompt "$PROMPT" \
+        --arg prompt "$CURRENT_PROMPT" \
         --arg status "running" \
         --arg start "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
         '{id: $id, name: $name, prompt: $prompt, status: $status, start_time: $start, retry_count: 0}')
@@ -715,6 +775,12 @@ main() {
 
     # Initialize quota tracking
     init_quota
+
+    # Initialize prompt cycling
+    if ! init_prompts; then
+        log_event "error" "Prompt initialization failed. Exiting."
+        exit 1
+    fi
 
     # Discover Jules source (credentials already validated, so this uses cached data)
     discover_source
