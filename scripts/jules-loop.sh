@@ -60,6 +60,7 @@ load_config() {
     RETRY_MAX="${RETRY_MAX:-3}"
     RETRY_BASE_SECS="${RETRY_BASE_SECS:-5}"
     POLL_INTERVAL_SECS="${POLL_INTERVAL_SECS:-15}"
+    POLL_INITIAL_DELAY_SECS="${POLL_INITIAL_DELAY_SECS:-0}"
     QUOTA_DAILY_LIMIT="${QUOTA_DAILY_LIMIT:-}"
     DRY_RUN="${DRY_RUN:-false}"
 
@@ -612,6 +613,11 @@ wait_for_pr() {
     local start_time
     start_time=$(date +%s)
     local timeout=$EXECUTION_TIMEOUT_SECS
+
+    if [[ "$POLL_INITIAL_DELAY_SECS" -gt 0 ]]; then
+        log_event "info" "Waiting ${POLL_INITIAL_DELAY_SECS}s before initial polling..." "$CURRENT_SESSION_ID"
+        sleep "$POLL_INITIAL_DELAY_SECS"
+    fi
 
     log_event "session_polled" "Waiting for PR from session $CURRENT_SESSION_NAME..." "$CURRENT_SESSION_ID"
 

@@ -43,6 +43,7 @@ A continuous agent loop that uses the Jules API to create coding sessions, waits
 | `RETRY_MAX` | `3` | Max retries for transient API errors |
 | `RETRY_BASE_SECS` | `5` | Base delay for exponential backoff (5s, 15s, 45s) |
 | `POLL_INTERVAL_SECS` | `15` | Interval between session status polls |
+| `POLL_INITIAL_DELAY_SECS` | `0` | Delay after session creation before polling begins |
 | `QUOTA_DAILY_LIMIT` | (none) | Optional daily session limit |
 | `DRY_RUN` | `false` | If `true`, skip actual API calls |
 
