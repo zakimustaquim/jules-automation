@@ -26,9 +26,9 @@ description: "Task list template for feature implementation"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create Python entrypoint file at /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T002 Update /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.sh to hand off to the Python entrypoint (or mark as deprecated)
-- [ ] T003 [P] Add executable permissions and shebang in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T001 Create Python entrypoint file at /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T002 Update /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.sh to hand off to the Python entrypoint (or mark as deprecated)
+- [X] T003 [P] Add executable permissions and shebang in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
 
 ---
 
@@ -38,12 +38,12 @@ description: "Task list template for feature implementation"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Implement configuration loader (.env + environment defaults) in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T005 [P] Implement state file helpers for .jules/state.json in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T006 [P] Implement logging helper for .jules/log.jsonl in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T007 [P] Implement HTTP helpers (Jules + GitHub) using urllib in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T008 Implement retry with exponential backoff in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T009 Implement shutdown handling and graceful exit in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T004 Implement configuration loader (.env + environment defaults) in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T005 [P] Implement state file helpers for .jules/state.json in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T006 [P] Implement logging helper for .jules/log.jsonl in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T007 [P] Implement HTTP helpers (Jules + GitHub) using urllib in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T008 Implement retry with exponential backoff in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T009 Implement shutdown handling and graceful exit in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -57,13 +57,13 @@ description: "Task list template for feature implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Implement prompt selection logic (single prompt and weighted prompts) in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T011 [US1] Implement source discovery against the Jules API in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T012 [US1] Implement session creation payload and response handling in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T013 [US1] Implement PR polling loop with timeout in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T014 [US1] Implement PR merge flow and conflict detection in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T015 [US1] Implement main run loop orchestration in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T016 [US1] Implement DRY_RUN behavior for session, polling, and merge in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T010 [US1] Implement prompt selection logic (single prompt and weighted prompts) in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T011 [US1] Implement source discovery against the Jules API in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T012 [US1] Implement session creation payload and response handling in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T013 [US1] Implement PR polling loop with timeout in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T014 [US1] Implement PR merge flow and conflict detection in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T015 [US1] Implement main run loop orchestration in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T016 [US1] Implement DRY_RUN behavior for session, polling, and merge in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
 
 **Checkpoint**: User Story 1 should be functional and testable independently
 
@@ -77,10 +77,10 @@ description: "Task list template for feature implementation"
 
 ### Implementation for User Story 2
 
-- [ ] T017 [US2] Validate PROMPTS JSON schema and probability sum in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T018 [US2] Apply polling interval, initial delay, and execution timeout settings in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T019 [US2] Implement quota tracking and enforcement using .jules/state.json in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T020 [US2] Wire retry configuration values into retry logic in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T017 [US2] Validate PROMPTS JSON schema and probability sum in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T018 [US2] Apply polling interval, initial delay, and execution timeout settings in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T019 [US2] Implement quota tracking and enforcement using .jules/state.json in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T020 [US2] Wire retry configuration values into retry logic in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
 
 **Checkpoint**: User Story 2 should be functional and testable independently
 
@@ -94,9 +94,9 @@ description: "Task list template for feature implementation"
 
 ### Implementation for User Story 3
 
-- [ ] T021 [US3] Record state transitions for current session lifecycle in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T022 [US3] Record pause reasons for merge conflicts and quota exhaustion in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
-- [ ] T023 [US3] Emit structured log entries for key events (create, poll, merge, pause, shutdown) in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T021 [US3] Record state transitions for current session lifecycle in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T022 [US3] Record pause reasons for merge conflicts and quota exhaustion in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
+- [X] T023 [US3] Emit structured log entries for key events (create, poll, merge, pause, shutdown) in /Users/zm/Documents/GitHub/jules-interesting-app-automation/scripts/jules-loop.py
 
 **Checkpoint**: User Story 3 should be functional and testable independently
 
@@ -106,9 +106,9 @@ description: "Task list template for feature implementation"
 
 **Purpose**: Final cleanup and alignment with docs
 
-- [ ] T024 [P] Update /Users/zm/Documents/GitHub/jules-interesting-app-automation/README.md to reference the Python entrypoint
-- [ ] T025 [P] Align /Users/zm/Documents/GitHub/jules-interesting-app-automation/example.env with any clarified defaults
-- [ ] T026 [P] Validate quickstart steps against /Users/zm/Documents/GitHub/jules-interesting-app-automation/specs/002-python-jules-loop/quickstart.md
+- [X] T024 [P] Update /Users/zm/Documents/GitHub/jules-interesting-app-automation/README.md to reference the Python entrypoint
+- [X] T025 [P] Align /Users/zm/Documents/GitHub/jules-interesting-app-automation/example.env with any clarified defaults
+- [X] T026 [P] Validate quickstart steps against /Users/zm/Documents/GitHub/jules-interesting-app-automation/specs/002-python-jules-loop/quickstart.md
 
 ---
 
