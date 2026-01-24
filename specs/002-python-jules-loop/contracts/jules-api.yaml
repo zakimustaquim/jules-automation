@@ -1,0 +1,65 @@
+openapi: 3.0.3
+info:
+  title: Jules API (Subset)
+  version: 1.0.0
+servers:
+  - url: https://jules.googleapis.com
+paths:
+  /v1alpha/sessions:
+    get:
+      summary: List sessions
+      security:
+        - apiKeyAuth: []
+      responses:
+        "200":
+          description: Session list
+    post:
+      summary: Create session
+      security:
+        - apiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prompt:
+                  type: string
+                title:
+                  type: string
+                automationMode:
+                  type: string
+                sourceContext:
+                  type: object
+      responses:
+        "200":
+          description: Session created
+  /v1alpha/sources:
+    get:
+      summary: List sources
+      security:
+        - apiKeyAuth: []
+      responses:
+        "200":
+          description: Source list
+  /v1alpha/{sessionName}:
+    get:
+      summary: Get session
+      security:
+        - apiKeyAuth: []
+      parameters:
+        - name: sessionName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Session details
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-goog-api-key

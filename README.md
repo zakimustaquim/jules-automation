@@ -7,7 +7,7 @@ A continuous agent loop that uses the Jules API to create coding sessions, waits
 1. **Prerequisites**
    - Jules API key (from https://jules.google.com/settings#api)
    - GitHub token with repo write access
-   - `curl` and `jq` installed
+   - Python 3.11 installed
 
 2. **Setup**
 
@@ -20,7 +20,7 @@ A continuous agent loop that uses the Jules API to create coding sessions, waits
 
 3. **Run**
    ```bash
-   ./scripts/jules-loop.sh
+   python3 ./scripts/jules-loop.py
    ```
 
 ## Environment Variables
@@ -39,6 +39,7 @@ A continuous agent loop that uses the Jules API to create coding sessions, waits
 |----------|---------|-------------|
 | `TARGET_BRANCH` | `main` | Branch to target for PRs |
 | `PROMPT` | `Do something interesting in this codebase` | Prompt sent to Jules |
+| `PROMPTS` | (none) | JSON array of weighted prompts (overrides `PROMPT`) |
 | `EXECUTION_TIMEOUT_SECS` | `1800` | Max time to wait for a session to produce a PR (30 min) |
 | `RETRY_MAX` | `3` | Max retries for transient API errors |
 | `RETRY_BASE_SECS` | `5` | Base delay for exponential backoff (5s, 15s, 45s) |
@@ -80,4 +81,3 @@ The script creates a `.jules/` directory with:
 ## Graceful Shutdown
 
 Send `SIGINT` (Ctrl+C) or `SIGTERM` to gracefully stop the loop. State is flushed before exit.
-

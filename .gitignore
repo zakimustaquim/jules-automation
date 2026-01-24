@@ -12,3 +12,15 @@ Thumbs.db
 # Editor files
 *.swp
 *.tmp
+
+# Python artifacts
+__pycache__/
+*.pyc
+.venv/
+venv/
+dist/
+*.egg-info/
+
+# IDE settings
+.vscode/
+.idea/
